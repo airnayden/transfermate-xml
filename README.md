@@ -2,6 +2,7 @@
 
 ## Requirements
 PHP 8.1
+
 PostgreSQL
 
 ## Installation
