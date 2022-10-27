@@ -4,3 +4,4 @@ vendor
 .env
 install.lock
 storage/cache/twig/*
+!storage/cache/twig/index.html
