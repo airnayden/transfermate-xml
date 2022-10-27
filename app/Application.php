@@ -64,24 +64,38 @@ class Application
     {
         $parts = explode('/', $action);
 
-        $controller = 'App\\Controller\\' . ucfirst($parts[0]) . 'Controller';
+        try {
+            $controller = 'App\\Controller\\' . ucfirst($parts[0]) . 'Controller';
 
-        if (!class_exists($controller)) {
-            throw new \Exception('Invalid controller!');
+            //unset($parts[0]);
+
+            if (!class_exists($controller)) {
+                throw new \Exception('Invalid controller!');
+            }
+
+            if (!isset($parts[1])) {
+                $method = 'index';
+            } else {
+                $method = strtolower($parts[1]);
+
+                //unset($parts[1]);
+            }
+
+            $controllerObject = new $controller();
+
+            if (!method_exists($controllerObject, $method)) {
+                throw new \Exception('Invalid controller method!');
+            }
+
+            $params = array_merge($_GET, $_POST);
+
+            if (isset($params['action'])) {
+                unset($params['action']);
+            }
+
+            $controllerObject->{$method}((array) $params);
+        } catch (\Throwable $e) {
+            print $e->getMessage();
         }
-
-        if (!isset($parts[1])) {
-            $method = 'index';
-        } else {
-            $method = strtolower($parts[1]);
-        }
-
-        $controllerObject = new $controller();
-
-        if (!method_exists($controllerObject, $method)) {
-            throw new \Exception('Invalid controller method!');
-        }
-
-        $controllerObject->{$method}();
     }
 }
