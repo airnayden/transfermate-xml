@@ -73,7 +73,9 @@ class ScanFiles extends BaseCommand
         $subDirFiles = [];
 
         foreach ($filesystem->files($path) as $file) {
-            $thisDirFiles[] = $file->getPath() . '/' . $file->getFilename();
+            if ($file->getExtension() == 'xml') {
+                $thisDirFiles[] = $file->getPath() . '/' . $file->getFilename();
+            }
         }
 
         foreach ($filesystem->directories($path) as $directory) {

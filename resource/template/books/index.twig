@@ -15,7 +15,7 @@
                 {% for result in results %}
                 <tr class="single-author-book-row">
                     <td class="text-left">{{ result.id }}</td>
-                    <td class="text-left">{{ result.author.name }}</td>
+                    <td class="text-left">{{ result.name }}</td>
                     <td class="text-left">
                         {% if result.book is empty %}
                             No books!

@@ -18,10 +18,13 @@ class BooksController extends BaseController
         // Sanitization is handled by the ORM package when building the queries, no no need to perform it here.
         $filter = $params['filter'] ?? null;
 
-        $query = Capsule::table('authors');
+        $query = Capsule::table('authors')
+            ->select('authors.id', 'authors.name', 'books.name as book')
+            ->leftJoin('books', 'books.author_id', '=', 'authors.id');
 
         if (!is_null($filter)) {
-            //$query->where('', $filter);
+            $query->whereRaw('LOWER(authors.name) LIKE ?', ['%' . trim(mb_strtolower($filter)) . '%']);
+            $query->orWhereRaw('LOWER(books.name) LIKE ?', '%' . trim(mb_strtolower($filter)) . '%');
         }
 
         $results = $query->get();
